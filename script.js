@@ -135,10 +135,12 @@ function moveTowards(e1, e2, deltaTime) {
 }
 
 function getRandomEnemy(currentEnemy) {
-    let randomEnemy;
+    let randomEnemy = null;
+    let tries = 0;
     do {
         randomEnemy = enemies[Math.floor(Math.random() * enemies.length)];
-    } while (randomEnemy === currentEnemy || randomEnemy.isDead);
+        tries+=1
+    } while ((randomEnemy === currentEnemy || randomEnemy.isDead) && tries < 50);
     return randomEnemy;
 }
 
