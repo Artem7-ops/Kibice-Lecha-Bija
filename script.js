@@ -280,11 +280,11 @@ function takeScreenshot() {
             ctx.fill();
             drawDontClean()
             const dataURL = canvas.toDataURL();
-            isPaused = false;
             const link = document.createElement('a');
             link.href = dataURL;
             link.download = 'screenshot.png';
             link.click();
+            isPaused = false;
         };
     } catch (error) {
         console.error('Failed to take screenshot:', error);
