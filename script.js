@@ -289,7 +289,7 @@ function takeScreenshot() {
     } catch (error) {
         console.error('Failed to take screenshot:', error);
     }
-    isPaused = false;
+    //isPaused = false;
 }
 
 function toggleFullscreen() {
