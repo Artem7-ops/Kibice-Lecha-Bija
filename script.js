@@ -57,16 +57,13 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function gameLoop(timestamp) {
-    if (isPaused) {
-        requestAnimationFrame(gameLoop);
-        return;
+    if (!isPaused) {
+        const deltaTime = (timestamp - lastTime) / 1000;
+
+        update(deltaTime);
+        draw();
     }
-
-    const deltaTime = (timestamp - lastTime) / 1000;
     lastTime = timestamp;
-
-    update(deltaTime);
-    draw();
     requestAnimationFrame(gameLoop);
 }
 
@@ -203,6 +200,13 @@ function draw() {
     }
 }
 
+function drawDontClean() {
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < enemies.length; i++) {
+        drawEnemy(enemies[i]);
+    }
+}
+
 function drawEnemy(enemy) {
     ctx.save();
     ctx.translate(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
@@ -257,22 +261,35 @@ function randomNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+var imageUrl = '';
+
 function changeBackgroundImage() {
     const randomIndex = randomNum(0, 9);
-    const imageUrl = `bg${randomIndex}.jpg`;
+    imageUrl = `bg${randomIndex}.jpg`;
     document.body.style.backgroundImage = `url('${imageUrl}')`;
 }
 
 function takeScreenshot() {
     try {
-        const dataURL = canvas.toDataURL();
-        const link = document.createElement('a');
-        link.href = dataURL;
-        link.download = 'screenshot.png';
-        link.click();
+        isPaused = true;
+        const bg = new Image();
+        bg.src = imageUrl; 
+        bg.onload = function(){
+            const pattern = ctx.createPattern(this, "repeat");
+            ctx.fillStyle = pattern;
+            ctx.fill();
+            drawDontClean()
+            const dataURL = canvas.toDataURL();
+            isPaused = false;
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'screenshot.png';
+            link.click();
+        };
     } catch (error) {
         console.error('Failed to take screenshot:', error);
     }
+    isPaused = false;
 }
 
 function toggleFullscreen() {
@@ -286,7 +303,6 @@ function toggleFullscreen() {
 function restartGame() {
     initializeEnemies();
     lastTime = 0;
-    if (!isPaused) requestAnimationFrame(gameLoop);
 }
 
 document.getElementById('pauseButton').addEventListener('click', () => {
@@ -299,7 +315,6 @@ document.getElementById('resumeButton').addEventListener('click', () => {
     isPaused = false;
     document.getElementById('pauseButton').style.display = 'block';
     document.getElementById('resumeButton').style.display = 'none';
-    requestAnimationFrame(gameLoop);
 });
 
 document.getElementById('restartButton').addEventListener('click', restartGame);
@@ -310,14 +325,14 @@ document.addEventListener('fullscreenchange', function() {
     const controls = document.querySelector('.controls');
     if (document.fullscreenElement) {
         controls.style.display = 'none';
-        changeBackgroundImage();
     } else {
         controls.style.display = 'flex';
-        changeBackgroundImage();
     }
+    changeBackgroundImage();
 });
 
 changeBackgroundImage();
 setInterval(changeBackgroundImage, 10000);
 
+initializeEnemies();
 requestAnimationFrame(gameLoop);

@@ -27,15 +27,17 @@ canvas {
     display: flex;
     gap: 2%;
     z-index: 10;
-    width: 90%;
+    width: 100%;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 button {
-    padding: 1% 2%;
+    padding: 0.1% 0.1%;
     font-size: calc(0.8em + 1vw);
     cursor: pointer;
+    background-color: black;
+    color: whitesmoke;
 }
 
 @media (max-width: 768px) {
