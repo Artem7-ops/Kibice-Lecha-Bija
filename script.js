@@ -348,6 +348,10 @@ document.addEventListener('fullscreenchange', function() {
     changeBackgroundImage();
 });
 
+for(let i=0; i<10; i++){
+    new Image().src = 'bg'+i+'.jpg'
+}
+
 changeBackgroundImage();
 setInterval(changeBackgroundImage, 10000);
 
