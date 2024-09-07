@@ -292,7 +292,7 @@ function takeScreenshot() {
                 y = 0;
             }
 
-            ctx.drawImage(img, x, y, width, height);
+            ctx.drawImage(bg, x, y, width, height);
             drawDontClean()
             const dataURL = canvas.toDataURL();
             const link = document.createElement('a');
