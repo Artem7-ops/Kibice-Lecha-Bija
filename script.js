@@ -275,7 +275,7 @@ function takeScreenshot() {
         const bg = new Image();
         bg.src = imageUrl; 
         bg.onload = function(){
-            const imgRatio = img.width / img.height;
+            const imgRatio = bg.width / bg.height;
             const canvasRatio = canvas.width / canvas.height;
 
             let width, height, x, y;
