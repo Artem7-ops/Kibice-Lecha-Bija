@@ -39,11 +39,18 @@ function initializeEnemies() {
     }
 }
 
+function reInitEnemy(enemy){
+    enemy.width = canvas.width * spriteSizeRatio;
+    enemy.height = canvas.width * spriteSizeRatio;
+    enemy.speed = canvas.width * speedRatio;
+    enemy.flightSpeed = canvas.width * flightSpeedRatio;
+}
+
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    initializeEnemies();
+    enemies.forEach(reInitEnemy);
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -303,7 +310,7 @@ document.addEventListener('fullscreenchange', function() {
     const controls = document.querySelector('.controls');
     if (document.fullscreenElement) {
         controls.style.display = 'none';
-        document.body.style.backgroundImage = 'url("fullscreencustombg.jpg")';
+        changeBackgroundImage();
     } else {
         controls.style.display = 'flex';
         changeBackgroundImage();
