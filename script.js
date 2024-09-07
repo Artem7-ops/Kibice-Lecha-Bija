@@ -275,9 +275,24 @@ function takeScreenshot() {
         const bg = new Image();
         bg.src = imageUrl; 
         bg.onload = function(){
-            const pattern = ctx.createPattern(this, "repeat");
-            ctx.fillStyle = pattern;
-            ctx.fill();
+            const imgRatio = img.width / img.height;
+            const canvasRatio = canvas.width / canvas.height;
+
+            let width, height, x, y;
+
+            if (canvasRatio > imgRatio) {
+                width = canvas.width;
+                height = canvas.width / imgRatio;
+                x = 0;
+                y = (canvas.height - height) / 2;
+            } else {
+                width = canvas.height * imgRatio;
+                height = canvas.height;
+                x = (canvas.width - width) / 2;
+                y = 0;
+            }
+
+            ctx.drawImage(img, x, y, width, height);
             drawDontClean()
             const dataURL = canvas.toDataURL();
             const link = document.createElement('a');
